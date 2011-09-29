@@ -1,54 +1,52 @@
-============
-vmod_example
-============
+=========
+vmod_null
+=========
 
-----------------------
-Varnish Example Module
-----------------------
+---------------------
+Varnish Nulldata VMOD
+---------------------
 
-:Author: Martin Blix Grydeland
-:Date: 2011-05-26
+:Author: Kristian Lyngstøl
+:Date: 2011-09-29
 :Version: 1.0
 :Manual section: 3
 
 SYNOPSIS
 ========
 
-import example;
+import null;
+
+null.synth(STRING, LENGTH);
+
 
 DESCRIPTION
 ===========
 
-Example Varnish vmod demonstrating how to write an out-of-tree Varnish vmod.
-
-Implements the traditional Hello World as a vmod.
+Vmod for sending synthetic data with binary content. Typically used through
+in-line C.
 
 FUNCTIONS
 =========
 
-hello
+synth
 -----
 
 Prototype
         ::
 
-                hello(STRING S)
+                synth(STRING s, INT length)
 Return value
-	STRING
+	VOID
 Description
-	Returns "Hello, " prepended to S
+	Does the same as synthetic() in VCL, but uses a set length, thus
+        allowing null-data. Must be used in vcl_error.
 Example
         ::
-
-                set resp.http.hello = example.hello("World");
+                
+                Vmod_Func_null.synth(sp,"TEST",4);
 
 INSTALLATION
 ============
-
-This is an example skeleton for developing out-of-tree Varnish
-vmods. It implements the "Hello, World!" as a vmod callback. Not
-particularly useful in good hello world tradition, but demonstrates how
-to get the glue around a vmod working.
 
 The source tree is based on autotools to configure the building, and
 does also have the necessary bits in place to do functional unit tests
@@ -74,23 +72,22 @@ Make targets:
 
 In your VCL you could then use this vmod along the following lines::
         
-        import example;
+        import null;
 
         sub vcl_deliver {
                 # This sets resp.http.hello to "Hello, World"
-                set resp.http.hello = example.hello("World");
+                set resp.http.hello = null.hello("World");
         }
 
 HISTORY
 =======
 
-This manual page was released as part of the libvmod-example package,
-demonstrating how to create an out-of-tree Varnish vmod.
+This manual page was released as part of the libvmod-null package.
 
 COPYRIGHT
 =========
 
 This document is licensed under the same license as the
-libvmod-example project. See LICENSE for details.
+libvmod-null project. See LICENSE for details.
 
 * Copyright (c) 2011 Varnish Software

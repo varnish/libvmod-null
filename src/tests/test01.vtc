@@ -1,4 +1,4 @@
-varnishtest "Test example vmod"
+varnishtest "Test null vmod"
 
 server s1 {
        rxreq
@@ -6,17 +6,21 @@ server s1 {
 } -start
 
 varnish v1 -vcl+backend {
-	import example from "${vmod_topbuild}/src/.libs/libvmod_example.so";
+	import null from "${vmod_topbuild}/src/.libs/libvmod_null.so";
 
-	sub vcl_deliver {
-		set resp.http.hello = example.hello("World");
+	sub vcl_recv {
+		error 418 "TEAPOT";
+	}
+	sub vcl_error {
+		null.synth("TEST",4);
+		return (deliver);
 	}
 } -start
 
 client c1 {
 	txreq -url "/"
 	rxresp
-	expect resp.http.hello == "Hello, World"
+	expect resp.bodylen == 4
 }
 
 client c1 -run
