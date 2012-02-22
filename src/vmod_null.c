@@ -31,5 +31,9 @@ bin_synth(const struct sess *sp, unsigned flags, const char *str, int len)
 void
 vmod_synth(struct sess *sp, const char *name, const int len)
 {
+	if (sp->step != STP_ERROR) {
+		printf("Please only use vmod_synth from vcl_error\n");
+		assert(sp->step == STP_ERROR);
+	}
 	bin_synth(sp,0,name,len);
 }

@@ -1,0 +1,31 @@
+varnishtest "null: Only work within vcl_error"
+
+# It's only safe to use these features from vcl_error. There is code in
+# place that will assert if the code is not run from vcl_error. Let's
+# verify.
+
+server s1 {
+       rxreq
+       txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import null from "${vmod_topbuild}/src/.libs/libvmod_null.so";
+
+	sub vcl_deliver {
+		null.synth("TEST",4);
+		return (deliver);
+	}
+} -start
+
+client c1 {
+	txreq -url "/"
+	# Don't wait for reply, server should crash
+}
+
+client c1 -run
+delay 1.0
+
+# This will fail if it hasn't crashed
+varnish v1 -cliok "panic.show"
+varnish v1 -cliok "panic.clear"
