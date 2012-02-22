@@ -7,8 +7,8 @@ Varnish Nulldata VMOD
 ---------------------
 
 :Author: Kristian Lyngstøl
-:Date: 2011-09-29
-:Version: 1.0
+:Date: 2012-02-22
+:Version: 1.1
 :Manual section: 3
 
 SYNOPSIS
@@ -48,27 +48,22 @@ Example
 INSTALLATION
 ============
 
-The source tree is based on autotools to configure the building, and
-does also have the necessary bits in place to do functional unit tests
-using the varnishtest tool.
+Installation requires the Varnish source tree (only the source matching the
+binary installation).
 
-Usage::
+1. `./autogen.sh`  (for git-installation)
+2. `./configure VARNISHSRC=/path/to/your/varnish/source/varnish-cache`
+3. `make`
+4. `make install` (may require root: sudo make install)
+5. `make check` (Optional for regression tests)
 
- ./configure VARNISHSRC=DIR [VMODDIR=DIR]
-
-`VARNISHSRC` is the directory of the Varnish source tree for which to
-compile your vmod. Both the `VARNISHSRC` and `VARNISHSRC/include`
+VARNISHSRCDIR is the directory of the Varnish source tree for which to
+compile your vmod. Both the VARNISHSRCDIR and VARNISHSRCDIR/include
 will be added to the include search paths for your module.
 
-Optionally you can also set the vmod install directory by adding
-`VMODDIR=DIR` (defaults to the pkg-config discovered directory from your
-Varnish installation).
-
-Make targets:
-
-* make - builds the vmod
-* make install - installs your vmod in `VMODDIR`
-* make check - runs the unit tests in ``src/tests/*.vtc``
+Optionally you can also set the vmod install dir by adding VMODDIR=DIR
+(defaults to the pkg-config discovered directory from your Varnish
+installation).
 
 BUGS
 ====
@@ -79,7 +74,18 @@ of vcl_error, due to the way objects may disappear.
 HISTORY
 =======
 
-This manual page was released as part of the libvmod-null package.
+Version 1.0
+        Initial release
+
+Version 1.1
+        Fixes manual-path. Adds strict tests to ensure execution only takes
+        place in vcl_error.
+
+SEE ALSO
+========
+
+* varnishd(1)
+* vcl(7)
 
 COPYRIGHT
 =========
