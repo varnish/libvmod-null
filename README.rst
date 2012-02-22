@@ -42,7 +42,7 @@ Description
         allowing null-data. Must be used in vcl_error.
 Example
         ::
-                
+
                 Vmod_Func_null.synth(sp,"TEST",4);
 
 INSTALLATION
@@ -70,14 +70,11 @@ Make targets:
 * make install - installs your vmod in `VMODDIR`
 * make check - runs the unit tests in ``src/tests/*.vtc``
 
-In your VCL you could then use this vmod along the following lines::
-        
-        import null;
+BUGS
+====
 
-        sub vcl_deliver {
-                # This sets resp.http.hello to "Hello, World"
-                set resp.http.hello = null.hello("World");
-        }
+While not entirely a bug, it is dangerous to use this vmod anywhere outside
+of vcl_error, due to the way objects may disappear.
 
 HISTORY
 =======
