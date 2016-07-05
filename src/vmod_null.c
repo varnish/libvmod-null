@@ -1,39 +1,26 @@
-#include <stdlib.h>
-
+#include "vcl.h"
 #include "vrt.h"
-#include "bin/varnishd/cache.h"
+#include "cache/cache.h"
 
 #include "vcc_if.h"
 
-int
-init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
+VCL_VOID
+vmod_synth(const struct vrt_ctx *ctx, VCL_STRING name, VCL_INT len)
 {
-	return (0);
-}
+	struct vsb *vsb;
 
-void
-bin_synth(const struct sess *sp, unsigned flags, const char *str, int len)
-{
-        struct vsb *vsb;
+	assert(ctx->method == VCL_MET_SYNTH ||
+	    ctx->method == VCL_MET_BACKEND_ERROR);
 
-        (void)flags;
-        CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
-        CHECK_OBJ_NOTNULL(sp->obj, OBJECT_MAGIC);
-        vsb = SMS_Makesynth(sp->obj);
-        AN(vsb);
-        VSB_bcat(vsb, str,len);
-        SMS_Finish(sp->obj);   
-        http_Unset(sp->obj->http, H_Content_Length);
-        http_PrintfHeader(sp->wrk, sp->fd, sp->obj->http,
-            "Content-Length: %d", sp->obj->len);
-}
-
-void
-vmod_synth(struct sess *sp, const char *name, const int len)
-{
-	if (sp->step != STP_ERROR) {
-		printf("Please only use vmod_synth from vcl_error\n");
-		assert(sp->step == STP_ERROR);
+	if (ctx->method == VCL_MET_BACKEND_ERROR) {
+		CHECK_OBJ_NOTNULL(ctx->bo, BUSYOBJ_MAGIC);
+		vsb = ctx->bo->synth_body;
+	} else {
+		CHECK_OBJ_NOTNULL(ctx->req, REQ_MAGIC);
+		vsb = ctx->req->synth_body;
 	}
-	bin_synth(sp,0,name,len);
+
+	CHECK_OBJ_NOTNULL(vsb, VSB_MAGIC);
+
+	VSB_bcat(vsb, name, len);
 }

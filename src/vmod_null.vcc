@@ -1,3 +1,2 @@
-Module null
-Init init_function
-Function VOID synth(STRING, INT)
+$Module null 3 Null VMOD
+$Function VOID synth(STRING, INT)

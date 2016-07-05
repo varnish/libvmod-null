@@ -1,8 +1,4 @@
-varnishtest "null: Only work within vcl_error"
-
-# It's only safe to use these features from vcl_error. There is code in
-# place that will assert if the code is not run from vcl_error. Let's
-# verify.
+varnishtest "Only work within vcl_synth or vcl_backend_error"
 
 server s1 {
        rxreq
@@ -13,17 +9,17 @@ varnish v1 -vcl+backend {
 	import null from "${vmod_topbuild}/src/.libs/libvmod_null.so";
 
 	sub vcl_deliver {
-		null.synth("TEST",4);
+		null.synth("TEST", 4);
 		return (deliver);
 	}
 } -start
 
 client c1 {
 	txreq -url "/"
-	# Don't wait for reply, server should crash
 }
 
 client c1 -run
+
 delay 1.0
 
 # This will fail if it hasn't crashed

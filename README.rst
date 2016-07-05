@@ -2,13 +2,14 @@
 vmod_null
 =========
 
----------------------
-Varnish Nulldata VMOD
----------------------
+---------------------------
+Varnish Synth() binary VMOD
+---------------------------
 
 :Author: Kristian Lyngstøl
-:Date: 2012-02-22
-:Version: 1.1
+:Author: Reza Naghibi
+:Date: 2016-07-05
+:Version: 1.2
 :Manual section: 3
 
 SYNOPSIS
@@ -22,8 +23,7 @@ null.synth(STRING, LENGTH);
 DESCRIPTION
 ===========
 
-Vmod for sending synthetic data with binary content. Typically used through
-in-line C.
+Vmod for sending synthetic data with binary content.
 
 FUNCTIONS
 =========
@@ -39,11 +39,11 @@ Return value
 	VOID
 Description
 	Does the same as synthetic() in VCL, but uses a set length, thus
-        allowing null-data. Must be used in vcl_error.
+        allowing null-data. Must be used in vcl_synth or vcl_backend_error.
 Example
         ::
 
-                Vmod_Func_null.synth(sp,"TEST",4);
+                null.synth("TEST",4);
 
 INSTALLATION
 ============
@@ -81,6 +81,9 @@ Version 1.1
         Fixes manual-path. Adds strict tests to ensure execution only takes
         place in vcl_error.
 
+Version 1.2
+        4.0 and 4.1 support.
+
 SEE ALSO
 ========
 
@@ -93,4 +96,4 @@ COPYRIGHT
 This document is licensed under the same license as the
 libvmod-null project. See LICENSE for details.
 
-* Copyright (c) 2011 Varnish Software
+* Copyright (c) 2011-2016 Varnish Software

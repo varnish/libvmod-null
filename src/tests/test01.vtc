@@ -9,10 +9,11 @@ varnish v1 -vcl+backend {
 	import null from "${vmod_topbuild}/src/.libs/libvmod_null.so";
 
 	sub vcl_recv {
-		error 418 "TEAPOT";
+		return (synth(418, "TEAPOT"));
 	}
-	sub vcl_error {
-		null.synth("TEST",4);
+
+	sub vcl_synth {
+		null.synth("TEST!", 5);
 		return (deliver);
 	}
 } -start
@@ -20,7 +21,8 @@ varnish v1 -vcl+backend {
 client c1 {
 	txreq -url "/"
 	rxresp
-	expect resp.bodylen == 4
+	expect resp.bodylen == 5
+	expect resp.body == "TEST!"
 }
 
 client c1 -run
