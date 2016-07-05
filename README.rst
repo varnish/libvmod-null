@@ -2,9 +2,9 @@
 vmod_null
 =========
 
----------------------------
-Varnish Synth() binary VMOD
----------------------------
+-----------------
+Varnish NULL VMOD
+-----------------
 
 :Author: Kristian Lyngstøl
 :Author: Reza Naghibi
@@ -23,7 +23,7 @@ null.synth(STRING, LENGTH);
 DESCRIPTION
 ===========
 
-Vmod for sending synthetic data with binary content.
+VMOD for sending synthetic data with binary content.
 
 FUNCTIONS
 =========

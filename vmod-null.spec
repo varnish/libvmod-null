@@ -16,7 +16,7 @@ BuildRequires: varnish-libs-devel >= 4.0.2
 Null VMOD
 
 %prep
-%setup -n libvmod-null-master
+%setup -n libvmod-null-trunk
 
 %build
 %configure --prefix=/usr/

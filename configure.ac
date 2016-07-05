@@ -1,6 +1,6 @@
 AC_PREREQ(2.59)
 AC_COPYRIGHT([Copyright (c) 2011-2016 Varnish Software AS])
-AC_INIT([libvmod-null], [master])
+AC_INIT([libvmod-null], [trunk])
 AC_CONFIG_MACRO_DIR([m4])
 m4_ifndef([VARNISH_VMOD_INCLUDES], AC_MSG_ERROR([Need varnish.m4 -- see README.rst]))
 AC_CONFIG_SRCDIR(src/vmod_null.vcc)
@@ -19,7 +19,6 @@ if test "x$ac_cv_prog_cc_c99" = xno; then
 fi
 AC_PROG_CPP
 
-LT_INIT([disable-static])
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
@@ -54,6 +53,7 @@ AS_VAR_IF([$1], [""], [$5], [$4])dnl
 ])
 
 PKG_CHECK_MODULES([libvarnishapi], [varnishapi])
+PKG_CHECK_VAR([LIBVARNISHAPI_PREFIX], [varnishapi], [prefix])
 PKG_CHECK_VAR([LIBVARNISHAPI_DATAROOTDIR], [varnishapi], [datarootdir])
 PKG_CHECK_VAR([LIBVARNISHAPI_BINDIR], [varnishapi], [bindir])
 PKG_CHECK_VAR([LIBVARNISHAPI_SBINDIR], [varnishapi], [sbindir])
@@ -63,6 +63,9 @@ AC_SUBST([LIBVARNISHAPI_DATAROOTDIR])
 VARNISH_VMOD_INCLUDES
 VARNISH_VMOD_DIR
 VARNISH_VMODTOOL
+# inherit the prefix from Varnish.
+# acessing ac_ variable because AC_PREFIX_DEFAULT acts too early
+ac_default_prefix=$LIBVARNISHAPI_PREFIX
 
 AC_PATH_PROG([VARNISHTEST], [varnishtest], [],
     [$LIBVARNISHAPI_BINDIR:$LIBVARNISHAPI_SBINDIR:$PATH])
