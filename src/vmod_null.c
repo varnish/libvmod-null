@@ -9,8 +9,14 @@ vmod_synth(const struct vrt_ctx *ctx, VCL_STRING name, VCL_INT len)
 {
 	struct vsb *vsb;
 
+	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
+
 	assert(ctx->method == VCL_MET_SYNTH ||
 	    ctx->method == VCL_MET_BACKEND_ERROR);
+
+	if (name == NULL || len <= 0) {
+		return;
+	}
 
 	if (ctx->method == VCL_MET_BACKEND_ERROR) {
 		CHECK_OBJ_NOTNULL(ctx->bo, BUSYOBJ_MAGIC);
