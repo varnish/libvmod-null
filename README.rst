@@ -47,14 +47,48 @@ Example
 INSTALLATION
 ============
 
-Installation requires the Varnish source tree (only the source matching the
-binary installation).
+The source tree is based on autotools to configure the building, and
+does also have the necessary bits in place to do functional unit tests
+using the ``varnishtest`` tool.
 
-1. `./autogen.sh`  (for git-installation)
-2. `./configure`
-3. `make`
-4. `make check` (Optional)
-5. `make install` (may require root: sudo make install)
+Building requires the Varnish header files and uses pkg-config to find
+the necessary paths.
+
+Pre-requisites::
+
+ sudo apt-get install -y autotools-dev make automake libtool pkg-config libvarnishapi1 libvarnishapi-dev
+
+Usage::
+
+ ./autogen.sh
+ ./configure
+
+If you have installed Varnish to a non-standard directory, call
+``autogen.sh`` and ``configure`` with ``PKG_CONFIG_PATH`` pointing to
+the appropriate path. For example, when varnishd configure was called
+with ``--prefix=$PREFIX``, use
+
+ PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig
+ export PKG_CONFIG_PATH
+
+Make targets:
+
+* make - builds the vmod.
+* make install - installs your vmod.
+* make check - runs the unit tests in ``src/tests/*.vtc``
+* make distcheck - run check and prepare a tarball of the vmod.
+
+Installation directories
+------------------------
+
+By default, the vmod ``configure`` script installs the built vmod in
+the same directory as Varnish, determined via ``pkg-config(1)``. The
+vmod installation directory can be overridden by passing the
+``VMOD_DIR`` variable to ``configure``.
+
+Other files like man-pages and documentation are installed in the
+locations determined by ``configure``, which inherits its default
+``--prefix`` setting from Varnish.
 
 HISTORY
 =======
