@@ -21,6 +21,7 @@ varnish v1 -vcl+backend {
 client c1 {
 	txreq -url "/"
 	rxresp
+	expect resp.http.Content-Length == 5
 	expect resp.bodylen == 5
 	expect resp.body == "TEST!"
 }
