@@ -20,7 +20,7 @@ client c1 {
 
 client c1 -run
 
-delay 1.0
+delay 3.0
 
 # This will fail if it hasn't crashed
 varnish v1 -cliok "panic.show"
